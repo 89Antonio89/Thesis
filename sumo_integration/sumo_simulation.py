@@ -15,7 +15,7 @@ import collections
 import enum
 import logging
 import os
-
+import requests
 import carla  # pylint: disable=import-error
 import sumolib  # pylint: disable=import-error
 import traci  # pylint: disable=import-error
@@ -99,7 +99,8 @@ class SumoActorClass(enum.Enum):
     CUSTOM2 = "custom2"
 
 
-SumoActor = collections.namedtuple('SumoActor', 'type_id vclass transform signals extent color')
+SumoActor = collections.namedtuple(
+    'SumoActor', 'type_id vclass transform signals extent color')
 
 # ==================================================================================================
 # -- sumo traffic lights ---------------------------------------------------------------------------
@@ -110,6 +111,7 @@ class SumoTLLogic(object):
     """
     SumoTLLogic holds the data relative to a traffic light in sumo.
     """
+
     def __init__(self, tlid, states, parameters):
         self.tlid = tlid
         self.states = states
@@ -159,6 +161,7 @@ class SumoTLManager(object):
     SumoTLManager is responsible for the management of the sumo traffic lights (i.e., keeps control
     of the current program, phase, ...)
     """
+
     def __init__(self):
         self._tls = {}  # {tlid: {program_id: SumoTLLogic}
         self._current_program = {}  # {tlid: program_id}
@@ -225,7 +228,8 @@ class SumoTLManager(object):
         """
         signals = set()
         for tlid, program_id in self._current_program.items():
-            signals.update(self._tls[tlid][program_id].get_associated_signals(landmark_id))
+            signals.update(
+                self._tls[tlid][program_id].get_associated_signals(landmark_id))
         return signals
 
     def get_state(self, landmark_id):
@@ -262,7 +266,8 @@ class SumoTLManager(object):
         Switch off all traffic lights.
         """
         for tlid, link_index in self.get_all_signals():
-            traci.trafficlight.setLinkState(tlid, link_index, SumoSignalState.OFF)
+            traci.trafficlight.setLinkState(
+                tlid, link_index, SumoSignalState.OFF)
         self._off = True
 
     def tick(self):
@@ -304,10 +309,12 @@ def _get_sumo_net(cfg_file):
     sumo_net = sumolib.net.readNet(net_file)
     return sumo_net
 
+
 class SumoSimulation(object):
     """
     SumoSimulation is responsible for the management of the sumo simulation.
     """
+
     def __init__(self, cfg_file, step_length, host=None, port=None, sumo_gui=False, client_order=1):
         if sumo_gui is True:
             sumo_binary = sumolib.checkBinary('sumo-gui')
@@ -317,20 +324,24 @@ class SumoSimulation(object):
         if host is None or port is None:
             logging.info('Starting new sumo server...')
             if sumo_gui is True:
-                logging.info('Remember to press the play button to start the simulation')
+                logging.info(
+                    'Remember to press the play button to start the simulation')
 
             traci.start([sumo_binary,
-                '--configuration-file', cfg_file,
-                '--step-length', str(step_length),
-                '--lateral-resolution', '0.25',
-                '--collision.check-junctions'
-            ])
-
+                         '--configuration-file', cfg_file,
+                         '--step-length', str(step_length),
+                         '--lateral-resolution', '0.25',
+                         '--collision.check-junctions'
+                         ], port=3001)
+            print("start server sumo")
         else:
-            logging.info('Connection to sumo server. Host: %s Port: %s', host, port)
+            logging.info(
+                'Connection to sumo server. Host: %s Port: %s', host, port)
             traci.init(host=host, port=port)
+            print("init")
 
         traci.setOrder(client_order)
+        print("pass here")
 
         # Retrieving net from configuration file.
         self.net = _get_sumo_net(cfg_file)
@@ -405,7 +416,8 @@ class SumoSimulation(object):
         height = results[traci.constants.VAR_HEIGHT]
 
         location = list(results[traci.constants.VAR_POSITION3D])
-        rotation = [results[traci.constants.VAR_SLOPE], results[traci.constants.VAR_ANGLE], 0.0]
+        rotation = [results[traci.constants.VAR_SLOPE],
+                    results[traci.constants.VAR_ANGLE], 0.0]
         transform = carla.Transform(carla.Location(location[0], location[1], location[2]),
                                     carla.Rotation(rotation[0], rotation[1], rotation[2]))
 
@@ -427,9 +439,11 @@ class SumoSimulation(object):
             vclass = traci.vehicletype.getVehicleClass(type_id)
             if vclass not in self._routes:
                 logging.debug('Creating route for %s vehicle class', vclass)
-                allowed_edges = [e for e in self.net.getEdges() if e.allows(vclass)]
+                allowed_edges = [
+                    e for e in self.net.getEdges() if e.allows(vclass)]
                 if allowed_edges:
-                    traci.route.add("carla_route_{}".format(vclass), [allowed_edges[0].getID()])
+                    traci.route.add("carla_route_{}".format(
+                        vclass), [allowed_edges[0].getID()])
                     self._routes.add(vclass)
                 else:
                     logging.error(
@@ -437,7 +451,8 @@ class SumoSimulation(object):
                         type_id)
                     return INVALID_ACTOR_ID
 
-            traci.vehicle.add(actor_id, 'carla_route_{}'.format(vclass), typeID=type_id)
+            traci.vehicle.add(
+                actor_id, 'carla_route_{}'.format(vclass), typeID=type_id)
         except traci.exceptions.TraCIException as error:
             logging.error('Spawn sumo actor failed: %s', error)
             return INVALID_ACTOR_ID
@@ -483,7 +498,8 @@ class SumoSimulation(object):
         loc_x, loc_y = transform.location.x, transform.location.y
         yaw = transform.rotation.yaw
 
-        traci.vehicle.moveToXY(vehicle_id, "", 0, loc_x, loc_y, angle=yaw, keepRoute=2)
+        traci.vehicle.moveToXY(vehicle_id, "", 0, loc_x,
+                               loc_y, angle=yaw, keepRoute=2)
         if signals is not None:
             traci.vehicle.setSignals(vehicle_id, signals)
         return True

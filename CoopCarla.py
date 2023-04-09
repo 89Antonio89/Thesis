@@ -19,9 +19,6 @@ from run_synchronization import SimulationSynchronization  # pylint: disable=wro
 from util.netconvert_carla import netconvert_carla
 
 
-
-
-
 def write_sumocfg_xml(cfg_file, net_file, vtypes_file, viewsettings_file, additional_traci_clients=0):
     """
     Writes sumo configuration xml file.
@@ -35,11 +32,12 @@ def write_sumocfg_xml(cfg_file, net_file, vtypes_file, viewsettings_file, additi
     gui_tag = ET.SubElement(root, 'gui_only')
     ET.SubElement(gui_tag, 'gui-settings-file', {'value': viewsettings_file})
 
-    ET.SubElement(root, 'num-clients', {'value': str(additional_traci_clients+1)})
+    ET.SubElement(root, 'num-clients',
+                  {'value': str(additional_traci_clients+1)})
 
     tree = ET.ElementTree(root)
-    tree.write(cfg_file, pretty_print=True, encoding='UTF-8', xml_declaration=True)
-
+    tree.write(cfg_file, pretty_print=True,
+               encoding='UTF-8', xml_declaration=True)
 
 
 def on_traffic_light_event(event, traffic_light):
@@ -53,28 +51,28 @@ def on_traffic_light_event(event, traffic_light):
             distance = vehicle_location.distance(traffic_light_location)
             if distance < 50:  # Adjust this value based on your needs
                 # Send the car passing event to your API
-                requests.post('http://127.0.0.1:5000/traffic_light', json={'event': 'car_passed', 'traffic_light_id': traffic_light.id})
+                requests.post('http://127.0.0.1:5000/traffic_light',
+                              json={'event': 'car_passed', 'traffic_light_id': traffic_light.id})
+
 
 def main():
-# Connect to the Carla server and create a Carla world object
+    # Connect to the Carla server and create a Carla world object
     try:
         client = carla.Client('localhost', args.port)
         client.set_timeout(30.0)
         world = client.get_world()
     finally:
         print("connected")
-            
-
 
     # Read file content
-    xodr_file_path = 'boavista.xodr'
-    with  io.open(xodr_file_path, 'r',encoding="utf-8") as f:
-     xodr_content = f.read()
+    xodr_file_path = 'CampoAlegre.xodr'
+    with io.open(xodr_file_path, 'r', encoding="utf-8") as f:
+        xodr_content = f.read()
 
     print("loaded file")
-    
+
     vertex_distance = 2.0  # in meters
-    max_road_length = 50.0 # in meters
+    max_road_length = 50.0  # in meters
     wall_height = 0.0      # in meters
     extra_width = 0.6      # in meters
     world = client.generate_opendrive_world(
@@ -110,21 +108,23 @@ def main():
     cfg_file = os.path.join(tmpdir, current_map.name + '.sumocfg')
     vtypes_file = os.path.join(basedir, 'examples', 'carlavtypes.rou.xml')
     viewsettings_file = os.path.join(basedir, 'examples', 'viewsettings.xml')
-    write_sumocfg_xml(cfg_file, net_file, vtypes_file, viewsettings_file, args.additional_traci_clients)
+    write_sumocfg_xml(cfg_file, net_file, vtypes_file,
+                      viewsettings_file, args.additional_traci_clients)
 
     sumo_net = sumolib.net.readNet(net_file)
+    print(args)
     sumo_simulation = SumoSimulation(cfg_file,
                                      args.step_length,
                                      host=args.sumo_host,
                                      port=args.sumo_port,
-                                     sumo_gui=args.sumo_gui,
+                                     sumo_gui=False,
                                      client_order=args.client_order)
     # ---------------
     # synchronization
     # ---------------
     synchronization = SimulationSynchronization(sumo_simulation, carla_simulation, args.tls_manager,
                                                 args.sync_vehicle_color, args.sync_vehicle_lights)
-    
+
     try:
         # ----------
         # Blueprints
@@ -143,33 +143,40 @@ def main():
             ]
             blueprints = [x for x in blueprints if not x.endswith('microlino')]
             blueprints = [x for x in blueprints if not x.endswith('carlacola')]
-            blueprints = [x for x in blueprints if not x.endswith('cybertruck')]
+            blueprints = [
+                x for x in blueprints if not x.endswith('cybertruck')]
             blueprints = [x for x in blueprints if not x.endswith('t2')]
             blueprints = [x for x in blueprints if not x.endswith('sprinter')]
             blueprints = [x for x in blueprints if not x.endswith('firetruck')]
             blueprints = [x for x in blueprints if not x.endswith('ambulance')]
 
         if not blueprints:
-            raise RuntimeError('No blueprints available due to user restrictions.')
+            raise RuntimeError(
+                'No blueprints available due to user restrictions.')
 
         if args.number_of_walkers > 0:
-            logging.warning('Pedestrians are not supported yet. No walkers will be spawned.')
-       
-       
-        traffic_lights = world.get_actors().filter('traffic.traffic_light') 
-        print(traffic_lights)   
+            logging.warning(
+                'Pedestrians are not supported yet. No walkers will be spawned.')
+
+        traffic_lights = world.get_actors().filter('traffic.traffic_light')
+        print(traffic_lights)
         traffic_light_sensors = []
         for traffic_light in traffic_lights:
             collision_sensor_bp = world.get_blueprint_library().find('sensor.other.collision')
-            collision_sensor_transform = carla.Transform(carla.Location(x=0.8, z=1.7))
-            collision_sensor = world.spawn_actor(collision_sensor_bp, collision_sensor_transform, attach_to=traffic_light)
-            collision_sensor.listen(lambda event: on_traffic_light_event(event, traffic_light))
+            collision_sensor_transform = carla.Transform(
+                carla.Location(x=0.8, z=1.7))
+            collision_sensor = world.spawn_actor(
+                collision_sensor_bp, collision_sensor_transform, attach_to=traffic_light)
+            collision_sensor.listen(
+                lambda event: on_traffic_light_event(event, traffic_light))
             traffic_light_sensors.append(collision_sensor)
         print('atached sensors')
         for v in world.get_actors().filter('*vehicle*'):
             collision_sensor_bp = world.get_blueprint_library().find('sensor.other.collision')
-            collision_sensor_transform = carla.Transform(carla.Location(x=0.8, z=1.7))
-            collision_sensor = world.spawn_actor(collision_sensor_bp, collision_sensor_transform, attach_to=v)
+            collision_sensor_transform = carla.Transform(
+                carla.Location(x=0.8, z=1.7))
+            collision_sensor = world.spawn_actor(
+                collision_sensor_bp, collision_sensor_transform, attach_to=v)
         # --------------
         # Spawn vehicles
         # --------------
@@ -185,7 +192,8 @@ def main():
                 edge = random.choice(allowed_edges)
 
                 traci.route.add('route_{}'.format(i), [edge.getID()])
-                traci.vehicle.add('sumo_{}'.format(i), 'route_{}'.format(i), typeID=type_id)
+                traci.vehicle.add('sumo_{}'.format(
+                    i), 'route_{}'.format(i), typeID=type_id)
             else:
                 logging.error(
                     'Could not found a route for %s. No vehicle will be spawned in sumo',
@@ -204,21 +212,18 @@ def main():
 
                 if index == (len(route) - 1):
                     current_edge = sumo_net.getEdge(route[index])
-                    available_edges = list(current_edge.getAllowedOutgoing(vclass).keys())
+                    available_edges = list(
+                        current_edge.getAllowedOutgoing(vclass).keys())
                     if available_edges:
                         next_edge = random.choice(available_edges)
 
                         new_route = [current_edge.getID(), next_edge.getID()]
                         traci.vehicle.setRoute(vehicle_id, new_route)
-                 
+
             end = time.time()
             elapsed = end - start
             if elapsed < args.step_length:
                 time.sleep(args.step_length - elapsed)
-                
-        
-        
-        
 
     except KeyboardInterrupt:
         logging.info('Cancelled by user.')
@@ -228,25 +233,6 @@ def main():
 
         if os.path.exists(tmpdir):
             shutil.rmtree(tmpdir)
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if __name__ == '__main__':
@@ -258,14 +244,14 @@ if __name__ == '__main__':
     argparser.add_argument('-p',
                            '--port',
                            metavar='P',
-                           default=3000,
+                           default=2000,
                            type=int,
                            help='TCP port to listen to (default: 2000)')
     argparser.add_argument('--sumo-host',
-                           default=None,
+                           default='localhost',
                            help='IP of the sumo host server (default: None)')
     argparser.add_argument('--sumo-port',
-                           default=3002,
+                           default=None,
                            type=int,
                            help='TCP port to listen to (default: None)')
     argparser.add_argument('-n',
@@ -291,7 +277,8 @@ if __name__ == '__main__':
                            metavar='PATTERN',
                            default='walker.pedestrian.*',
                            help='pedestrians filter (default: "walker.pedestrian.*")')
-    argparser.add_argument('--sumo-gui', action='store_true', help='run the gui version of sumo')
+    argparser.add_argument('--sumo-gui', action='store_true',
+                           help='run the gui version of sumo')
     argparser.add_argument('--step-length',
                            default=0.05,
                            type=float,
@@ -320,9 +307,7 @@ if __name__ == '__main__':
                            choices=['none', 'sumo', 'carla'],
                            help="select traffic light manager (default: none)",
                            default='none')
-    argparser.add_argument('--debug', action='store_true', help='enable debug messages')
+    argparser.add_argument('--debug', action='store_true',
+                           help='enable debug messages')
     args = argparser.parse_args()
     main()
-
-
-
