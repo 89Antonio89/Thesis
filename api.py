@@ -288,10 +288,18 @@ def insertCar():
     return ""
 
 
+@app.route('/getRoutes', methods=["GET"])
+def routes():
+    lock.acquire()
+    routes = traci.route.getIDList()
+    print(routes)
+    lock.release()
+    return jsonify(routes)
+
+
 @app.route('/set-weather', methods=["POST"])
 def setWeather():
     data = request.get_json()
-    print((data))
     try:
         world = client.get_world()
         weather = world.get_weather()
@@ -302,6 +310,32 @@ def setWeather():
     finally:
         print("wheater set ")
     return "wheater set"
+
+
+@app.route('/testCameras', methods=["GET"])
+def cam():
+    try:
+        vehicle_id = 1
+        vehicle = world.get_actor(vehicle_id)
+
+        # Spawn a camera and attach it to the vehicle
+        camera_bp = world.get_blueprint_library().find('sensor.camera.rgb')
+        camera_transform = carla.Transform(carla.Location(x=1.5, z=2.4))
+        camera = world.spawn_actor(camera_bp, camera_transform)
+        spectator = world.get_spectator()
+        spectator.set_transform(camera_transform)
+        camera.attach_to(spectator)
+
+        camera.listen(process_image)
+
+    finally:
+        print("wheater set ")
+    return "wheater set"
+
+
+def process_image(image):
+    # Do something with the image
+    image.save_to_disk('output_camera.png')
 
 
 if __name__ == "__main__":
