@@ -92,8 +92,6 @@ def init_simulation():
     with io.open(xodr_file_path, 'r', encoding="utf-8") as f:
         xodr_content = f.read()
 
-    print("loaded file")
-
     vertex_distance = 2.0  # in meters
     max_road_length = 50.0  # in meters
     wall_height = 0.0      # in meters
@@ -106,7 +104,6 @@ def init_simulation():
             additional_width=extra_width,
             smooth_junctions=True,
             enable_mesh_visibility=True))
-    print("loaded map")
  # Temporal folder to save intermediate files.
     tmpdir = tempfile.mkdtemp()
 
@@ -277,24 +274,43 @@ def carsInfo():
     return jsonify(vehicle_info)
 
 
-@app.route('/insertCart', methods=["POST"])
-def insertCar():
+@app.route('/insertCar', methods=["GET"])
+async def insertCar():
     lock.acquire()
-    data = request.get_json()
-    traci.vehicle.add('sumo_{}'.format(12), 'route_{}'.format(
-        1), typeID='vehicle.bh.crossbike')
-    print(data)
+    edge_list = traci.edge.getIDList()
     lock.release()
-    return ""
+    blueprints = await vTypes()
+    lock.acquire()
+    with open('data/vtypes.json') as f:
+        vtypes = json.load(f)['carla_blueprints']
+    print(blueprints)
+    # print(vtypes)
+    type_id = random.choice(blueprints)
+    vclass = vtypes[type_id]['vClass']
+    allowed_edges = [e for e in edge_list if e.allows(vclass)]
+    if allowed_edges:
+        edge = random.choice(allowed_edges)
+        traci.route.add('route_{}'.format(1), [edge.getID()])
+        traci.vehicle.add('sumo_{}'.format(
+            1), 'route_{}'.format(1), typeID=type_id)
+        lock.release()
+        return "inserted car"
+    else:
+        lock.release()
+        return 'Could not found a valid  route . No vehicle will be spawned in sumo'
 
 
 @app.route('/getRoutes', methods=["GET"])
 def routes():
     lock.acquire()
     routes = traci.route.getIDList()
-    print(routes)
     lock.release()
     return jsonify(routes)
+
+
+@app.route('/getvTypes', methods=["GET"])
+def vTypes():
+    return jsonify(blueprints)
 
 
 @app.route('/set-weather', methods=["POST"])
@@ -310,6 +326,21 @@ def setWeather():
     finally:
         print("wheater set ")
     return "wheater set"
+
+
+# @app.route('/insert', methods=["GET"])
+# def insert():
+#     print("dadas")
+#     try:
+#         world = client.get_world()
+#         weather = world.get_weather()
+#         weather.cloudiness = data['cloudcover']
+#         weather.wetness = data['humidity']
+#         weather.precipitation = data['precipitation']
+#         world.set_weather(weather)
+#     finally:
+#         print("wheater set ")
+#     return "wheater set"
 
 
 @app.route('/testCameras', methods=["GET"])
@@ -343,6 +374,90 @@ if __name__ == "__main__":
         client = carla.Client('localhost', 2000)
         client.set_timeout(30.0)
         world = client.get_world()
+
+        basedir = os.getcwd()
+
+        # Read file content
+        xodr_file_path = 'CampoAlegre.xodr'
+        with io.open(xodr_file_path, 'r', encoding="utf-8") as f:
+            xodr_content = f.read()
+
+        vertex_distance = 2.0  # in meters
+        max_road_length = 50.0  # in meters
+        wall_height = 0.0      # in meters
+        extra_width = 0.6      # in meters
+        world = client.generate_opendrive_world(
+            xodr_content, carla.OpendriveGenerationParameters(
+                vertex_distance=vertex_distance,
+                max_road_length=max_road_length,
+                wall_height=wall_height,
+                additional_width=extra_width,
+                smooth_junctions=True,
+                enable_mesh_visibility=True))
+    # Temporal folder to save intermediate files.
+        tmpdir = tempfile.mkdtemp()
+
+        # ----------------
+        # carla simulation
+        # ----------------
+        carla_simulation = CarlaSimulation(
+            '127.0.0.1', 2000, 0.05)
+
+        world = carla_simulation.client.get_world()
+        current_map = world.get_map()
+
+        xodr_file = os.path.join(tmpdir, current_map.name + '.xodr')
+        current_map.save_to_disk(xodr_file)
+
+        # ---------------
+        # sumo simulation
+        # ---------------
+        net_file = os.path.join(tmpdir, current_map.name + '.net.xml')
+        netconvert_carla(xodr_file, net_file, guess_tls=True)
+
+        basedir = os.path.dirname(os.path.realpath(__file__))
+        cfg_file = os.path.join(tmpdir, current_map.name + '.sumocfg')
+        vtypes_file = os.path.join(basedir, 'examples', 'carlavtypes.rou.xml')
+        viewsettings_file = os.path.join(
+            basedir, 'examples', 'viewsettings.xml')
+        write_sumocfg_xml(cfg_file, net_file, vtypes_file,
+                          viewsettings_file, 0)
+
+        sumo_net = sumolib.net.readNet(net_file)
+
+        sumo_simulation = SumoSimulation(cfg_file,
+                                         0.05,
+                                         host=None,
+                                         port=None,
+                                         sumo_gui=False,
+                                         client_order=1)
+
+        print("done sumo init")
+        # ---------------
+        # synchronization
+        # ---------------
+        synchronization = SimulationSynchronization(sumo_simulation, carla_simulation, 'carla',
+                                                    False, False)
+
+        with open('data/vtypes.json') as f:
+            vtypes = json.load(f)['carla_blueprints']
+        blueprints = vtypes.keys()
+        filterv = re.compile('vehicle.*')
+        blueprints = list(filter(filterv.search, blueprints))
+
+        if True:
+            blueprints = [
+                x for x in blueprints if vtypes[x]['vClass'] not in ('motorcycle', 'bicycle')
+            ]
+            blueprints = [x for x in blueprints if not x.endswith('microlino')]
+            blueprints = [x for x in blueprints if not x.endswith('carlacola')]
+            blueprints = [
+                x for x in blueprints if not x.endswith('cybertruck')]
+            blueprints = [x for x in blueprints if not x.endswith('t2')]
+            blueprints = [x for x in blueprints if not x.endswith('sprinter')]
+            blueprints = [x for x in blueprints if not x.endswith('firetruck')]
+            blueprints = [x for x in blueprints if not x.endswith('ambulance')]
         app.run(host='0.0.0.0')
+
     finally:
-        print("connected")
+        print("end of simulation")
