@@ -1,0 +1,29 @@
+This API provides a Co-simulation between CARLA(Car Learning to Act) AND SUMO (Simulation of Urban Mobility).
+
+requirements:
+
+- Python version >= 3.7
+- Carla version >= 0.9.14
+- SUMO version >= 1.18.0
+
+Usage
+
+Run CARLA:
+
+- ./CarlaUE4.exe -dx11 -carla-rpc-port=4000
+
+Run API:
+
+- py -3.7 api.py
+
+Here's how to make requests to the API:
+
+Example Request:
+
+curl -X GET http://localhost/startSimulation
+curl -X POST -d '{"key1":"value1", "key2":"value2"}' http://localhost/startSimulation
+
+Payload:
+{
+"radar": True
+}

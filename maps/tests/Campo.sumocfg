@@ -1,0 +1,5 @@
+<configuration>
+    <net-file value="D:\tese\coop\campo.net.xml"/>
+    <route-files value="D:\tese\coop\campo.rou.xml"/>
+
+</configuration>

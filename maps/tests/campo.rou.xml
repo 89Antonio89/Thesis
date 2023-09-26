@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2023-05-01 15:16:29 by Eclipse SUMO netedit Version 1.17.0
+-->
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <!-- VTypes -->
+    <vType id="vehicle.audi.a2" length="3.71" vClass="passenger" width="1.79" height="1.55"/>
+    <vType id="vehicle.audi.etron" length="4.86" vClass="evehicle" width="2.03" height="1.65"/>
+    <vType id="vehicle.audi.tt" length="4.18" vClass="passenger" width="1.99" height="1.39"/>
+    <vType id="vehicle.bmw.grandtourer" length="4.61" vClass="passenger" width="2.24" height="1.67"/>
+    <vType id="vehicle.carlamotors.carlacola" length="5.20" vClass="truck" guiShape="truck" width="2.63" height="2.47"/>
+    <vType id="vehicle.carlamotors.firetruck" length="8.47" vClass="passenger" width="2.89" height="3.83"/>
+    <vType id="vehicle.chevrolet.impala" length="5.36" vClass="passenger" width="2.03" height="1.41"/>
+    <vType id="vehicle.citroen.c3" length="3.99" vClass="passenger" width="1.85" height="1.62"/>
+    <vType id="vehicle.dodge.charger_2020" length="5.01" vClass="passenger" width="1.88" height="1.53"/>
+    <vType id="vehicle.dodge.charger_police" length="4.97" vClass="authority" guiShape="police" width="2.04" height="1.54"/>
+    <vType id="vehicle.dodge.charger_police_2020" length="5.24" vClass="passenger" width="1.93" height="1.64"/>
+    <vType id="vehicle.ford.ambulance" length="6.37" vClass="passenger" width="2.35" height="2.43"/>
+    <vType id="vehicle.ford.crown" length="5.37" vClass="passenger" width="1.80" height="1.57"/>
+    <vType id="vehicle.ford.mustang" length="4.72" vClass="passenger" width="1.89" height="1.30"/>
+    <vType id="vehicle.jeep.wrangler_rubicon" length="3.87" vClass="passenger" width="1.91" height="1.88"/>
+    <vType id="vehicle.lincoln.mkz_2017" length="4.90" vClass="passenger" width="2.13" height="1.51"/>
+    <vType id="vehicle.lincoln.mkz_2020" length="4.89" vClass="passenger" width="1.84" height="1.49"/>
+    <vType id="vehicle.mercedes.coupe" length="5.03" vClass="passenger" width="2.15" height="1.65"/>
+    <vType id="vehicle.mercedes.coupe_2020" length="4.67" vClass="passenger" width="1.81" height="1.44"/>
+    <vType id="vehicle.mercedes.sprinter" length="5.92" vClass="passenger" width="1.99" height="2.56"/>
+    <vType id="vehicle.micro.microlino" length="2.21" vClass="evehicle" width="1.48" height="1.38"/>
+    <vType id="vehicle.mini.cooper_s" length="3.81" vClass="passenger" width="1.97" height="1.48"/>
+    <vType id="vehicle.mini.cooper_s_2021" length="4.55" vClass="passenger" width="2.10" height="1.77"/>
+    <vType id="vehicle.mitsubishi.fusorosa" length="10.27" vClass="passenger" width="3.94" height="4.25"/>
+    <vType id="vehicle.nissan.micra" length="3.63" vClass="passenger" width="1.85" height="1.50"/>
+    <vType id="vehicle.nissan.patrol" length="4.60" vClass="passenger" width="1.93" height="1.85"/>
+    <vType id="vehicle.nissan.patrol_2021" length="5.57" vClass="passenger" width="2.15" height="2.05"/>
+    <vType id="vehicle.seat.leon" length="4.19" vClass="passenger" width="1.82" height="1.47"/>
+    <vType id="vehicle.tesla.cybertruck" length="6.27" vClass="evehicle" width="2.39" height="2.10"/>
+    <vType id="vehicle.tesla.model3" length="4.79" vClass="evehicle" width="2.16" height="1.49"/>
+    <vType id="vehicle.toyota.prius" length="4.51" vClass="evehicle" width="2.01" height="1.52"/>
+    <vType id="vehicle.volkswagen.t2" length="4.48" vClass="passenger" guiShape="passenger/van" width="2.07" height="2.04"/>
+    <vType id="vehicle.volkswagen.t2_2021" length="4.44" vClass="passenger" width="1.77" height="1.99"/>
+    <!-- Vehicles, persons and containers (sorted by depart) -->
+    <trip id="t_0" type="vehicle.tesla.model3" depart="0.00" from="-955" to="-922"/>
+    <trip id="t_1" type="vehicle.tesla.model3" depart="0.00" from="-955" to="-922"/>
+    <trip id="t_2" type="vehicle.tesla.model3" depart="0.00" from="-955" to="-922"/>
+    <trip id="t_3" type="vehicle.tesla.model3" depart="0.00" from="-955" to="-922"/>
+    <trip id="t_4" type="vehicle.tesla.model3" depart="0.00" from="-955" to="-922"/>
+    <trip id="t_5" type="vehicle.tesla.model3" depart="0.00" from="-955" to="-922"/>
+</routes>

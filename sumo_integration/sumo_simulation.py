@@ -330,18 +330,19 @@ class SumoSimulation(object):
             traci.start([sumo_binary,
                          '--configuration-file', cfg_file,
                          '--step-length', str(step_length),
+                        "--tripinfo-output", 'tripinfo.xml',
+                         '--collision-output', 'collision.xml',
                          '--lateral-resolution', '0.25',
-                         '--collision.check-junctions'
+                         '--collision.check-junctions',
+                         '--queue-output','queue.xml',
+                         '--device.emissions.probability', '1.0'
                          ], port=3001)
-            print("start server sumo")
         else:
             logging.info(
                 'Connection to sumo server. Host: %s Port: %s', host, port)
             traci.init(host=host, port=port)
-            print("init")
 
         traci.setOrder(client_order)
-        print("pass here")
 
         # Retrieving net from configuration file.
         self.net = _get_sumo_net(cfg_file)
@@ -406,7 +407,6 @@ class SumoSimulation(object):
         Accessor for sumo actor.
         """
         results = traci.vehicle.getSubscriptionResults(actor_id)
-
         type_id = results[traci.constants.VAR_TYPE]
         vclass = SumoActorClass(results[traci.constants.VAR_VEHICLECLASS])
         color = results[traci.constants.VAR_COLOR]

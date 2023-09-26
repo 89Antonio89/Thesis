@@ -65,25 +65,26 @@ def main():
         print("connected")
 
     # Read file content
-    xodr_file_path = 'CampoAlegre.xodr'
-    with io.open(xodr_file_path, 'r', encoding="utf-8") as f:
-        xodr_content = f.read()
+    # xodr_file_path = 'CampoAlegre.xodr'
+    # with io.open(xodr_file_path, 'r', encoding="utf-8") as f:
+    #     xodr_content = f.read()
 
+    world = client.load_world('Town01')
     print("loaded file")
 
-    vertex_distance = 2.0  # in meters
-    max_road_length = 50.0  # in meters
-    wall_height = 0.0      # in meters
-    extra_width = 0.6      # in meters
-    world = client.generate_opendrive_world(
-        xodr_content, carla.OpendriveGenerationParameters(
-            vertex_distance=vertex_distance,
-            max_road_length=max_road_length,
-            wall_height=wall_height,
-            additional_width=extra_width,
-            smooth_junctions=True,
-            enable_mesh_visibility=True))
-    print("loaded map")
+    # vertex_distance = 2.0  # in meters
+    # max_road_length = 50.0  # in meters
+    # wall_height = 0.0      # in meters
+    # extra_width = 0.6      # in meters
+    # world = client.generate_opendrive_world(
+    #     xodr_content, carla.OpendriveGenerationParameters(
+    #         vertex_distance=vertex_distance,
+    #         max_road_length=max_road_length,
+    #         wall_height=wall_height,
+    #         additional_width=extra_width,
+    #         smooth_junctions=True,
+    #         enable_mesh_visibility=True))
+    # print("loaded map")
  # Temporal folder to save intermediate files.
     tmpdir = tempfile.mkdtemp()
 

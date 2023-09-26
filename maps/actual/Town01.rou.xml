@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2023-06-19 22:29:52 by Eclipse SUMO netedit Version 1.17.0
+-->
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <!-- VTypes -->
+    <vType id="vehicle.audi.a2" length="3.72" vClass="passenger" width="1.79" height="1.54"/>
+    <vType id="vehicle.audi.etron" length="4.89" vClass="evehicle" width="2.09" height="1.65"/>
+    <vType id="vehicle.audi.tt" length="4.15" vClass="passenger" width="2.00" height="1.38"/>
+    <vType id="vehicle.bh.crossbike" length="1.51" vClass="bicycle" width="0.87" height="1.53"/>
+    <vType id="vehicle.bmw.grandtourer" length="4.64" vClass="passenger" width="2.26" height="1.68"/>
+    <vType id="vehicle.carlamotors.carlacola" length="5.20" vClass="truck" guiShape="truck" width="2.62" height="2.48"/>
+    <vType id="vehicle.chevrolet.impala" length="5.37" vClass="passenger" width="2.05" height="1.42"/>
+    <vType id="vehicle.citroen.c3" length="3.98" vClass="passenger" width="1.86" height="1.63"/>
+    <vType id="vehicle.diamondback.century" length="1.66" vClass="bicycle" width="0.42" height="1.49"/>
+    <vType id="vehicle.dodge.charger_police" length="5.01" vClass="authority" guiShape="police" width="2.05" height="1.58"/>
+    <vType id="vehicle.ford.mustang" length="4.90" vClass="passenger" width="2.06" height="1.48"/>
+    <vType id="vehicle.gazelle.omafiets" length="1.84" vClass="bicycle" width="0.47" height="1.59"/>
+    <vType id="vehicle.harley-davidson.low_rider" length="2.35" vClass="motorcycle" width="0.77" height="1.46"/>
+    <vType id="vehicle.jeep.wrangler_rubicon" length="3.87" vClass="passenger" width="1.91" height="1.88"/>
+    <vType id="vehicle.kawasaki.ninja" length="2.04" vClass="motorcycle" width="0.80" height="1.37"/>
+    <vType id="vehicle.lincoln.mkz_2017" length="4.90" vClass="passenger" width="2.06" height="1.48"/>
+    <vType id="vehicle.mercedes.coupe" length="5.04" vClass="passenger" width="2.16" height="1.64"/>
+    <vType id="vehicle.micro.microlino" length="2.20" vClass="evehicle" width="1.49" height="1.35"/>
+    <vType id="vehicle.mini.cooper_s" length="3.80" vClass="passenger" width="1.97" height="1.48"/>
+    <vType id="vehicle.nissan.micra" length="3.67" vClass="passenger" width="1.86" height="1.52"/>
+    <vType id="vehicle.nissan.patrol" length="4.52" vClass="passenger" width="1.92" height="1.89"/>
+    <vType id="vehicle.seat.leon" length="4.21" vClass="passenger" width="1.82" height="1.47"/>
+    <vType id="vehicle.tesla.cybertruck" length="6.36" vClass="evehicle" width="2.39" height="2.14"/>
+    <vType id="vehicle.tesla.model3" length="4.81" vClass="evehicle" width="2.17" height="1.52"/>
+    <vType id="vehicle.toyota.prius" length="4.54" vClass="evehicle" width="2.00" height="1.54"/>
+    <vType id="vehicle.volkswagen.t2" length="4.47" vClass="passenger" guiShape="passenger/van" width="1.81" height="2.05"/>
+    <vType id="vehicle.yamaha.yzf" length="2.19" vClass="motorcycle" width="0.77" height="1.63"/>
+    <!-- Vehicles, persons and containers (sorted by depart) -->
+    <trip id="t_0" type="vehicle.audi.a2" depart="0.00" from="40" to="38" via="39"/>
+    <trip id="t_1" type="vehicle.audi.a2" depart="0.00" from="40" to="38" via="39"/>
+    <trip id="t_4" type="vehicle.micro.microlino" depart="0.00" from="-38" to="-40" via="-39"/>
+    <trip id="t_2" type="vehicle.audi.tt" depart="2.00" from="40" to="38" via="39"/>
+    <trip id="t_3" type="vehicle.volkswagen.t2" depart="4.00" from="40" to="38"/>
+    <trip id="t_5" type="vehicle.tesla.model3" depart="6.00" from="-38" to="-40" via="-39"/>
+    <trip id="t_6" type="vehicle.seat.leon" depart="6.00" from="-38" to="-40" via="-39"/>
+</routes>

@@ -26,6 +26,7 @@ class CarlaSimulation(object):
     """
     CarlaSimulation is responsible for the management of the carla simulation.
     """
+
     def __init__(self, host, port, step_length):
         self.client = carla.Client(host, port)
         self.client.set_timeout(2.0)
@@ -49,7 +50,8 @@ class CarlaSimulation(object):
                 if traffic_ligth is not None:
                     self._tls[landmark.id] = traffic_ligth
                 else:
-                    logging.warning('Landmark %s is not linked to any traffic light', landmark.id)
+                    logging.warning(
+                        'Landmark %s is not linked to any traffic light', landmark.id)
 
     def get_actor(self, actor_id):
         """

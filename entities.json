@@ -1,0 +1,252 @@
+[
+    {
+        "id": "trip:Trip:1",
+        "type": "Trip",
+        "tripId": "t_0",
+        "blueprintType": {
+            "type": "string",
+            "value": "vehicle.tesla.model3",
+            "metadata": {}
+        },
+        "depart": {
+            "type": "string",
+            "value": "0.00",
+            "metadata": {}
+        },
+        "from": {
+            "type": "string",
+            "value": "-955",
+            "metadata": {}
+        },
+        "to": {
+            "type": "string",
+            "value": "-922",
+            "metadata": {}
+        }
+    },
+    {
+        "id": "trip:Trip:2",
+        "type": "Trip",
+        "tripId": "t_0",
+        "blueprintType": {
+            "type": "string",
+            "value": "vehicle.tesla.model3",
+            "metadata": {}
+        },
+        "depart": {
+            "type": "string",
+            "value": "0.00",
+            "metadata": {}
+        },
+        "from": {
+            "type": "string",
+            "value": "-955",
+            "metadata": {}
+        },
+        "to": {
+            "type": "string",
+            "value": "-922",
+            "metadata": {}
+        }
+    },
+    {
+        "id": "trip:Trip:3",
+        "type": "Trip",
+        "tripId": "t_0",
+        "blueprintType": {
+            "type": "string",
+            "value": "vehicle.tesla.model3",
+            "metadata": {}
+        },
+        "depart": {
+            "type": "string",
+            "value": "0.00",
+            "metadata": {}
+        },
+        "from": {
+            "type": "string",
+            "value": "-955",
+            "metadata": {}
+        },
+        "to": {
+            "type": "string",
+            "value": "-922",
+            "metadata": {}
+        }
+    },
+    {
+        "id": "trip:Trip:4",
+        "type": "Trip",
+        "tripId": "t_0",
+        "blueprintType": {
+            "type": "string",
+            "value": "vehicle.tesla.model3",
+            "metadata": {}
+        },
+        "depart": {
+            "type": "string",
+            "value": "0.00",
+            "metadata": {}
+        },
+        "from": {
+            "type": "string",
+            "value": "-955",
+            "metadata": {}
+        },
+        "to": {
+            "type": "string",
+            "value": "-922",
+            "metadata": {}
+        }
+    },
+    {
+        "id": "trip:Trip:5",
+        "type": "Trip",
+        "tripId": "t_0",
+        "blueprintType": {
+            "type": "string",
+            "value": "vehicle.tesla.model3",
+            "metadata": {}
+        },
+        "depart": {
+            "type": "string",
+            "value": "0.00",
+            "metadata": {}
+        },
+        "from": {
+            "type": "string",
+            "value": "-955",
+            "metadata": {}
+        },
+        "to": {
+            "type": "string",
+            "value": "-922",
+            "metadata": {}
+        }
+    },
+    {
+        "id": "trip:Trip:6",
+        "type": "Trip",
+        "tripId": "t_0",
+        "blueprintType": {
+            "type": "string",
+            "value": "vehicle.tesla.model3",
+            "metadata": {}
+        },
+        "depart": {
+            "type": "string",
+            "value": "0.00",
+            "metadata": {}
+        },
+        "from": {
+            "type": "string",
+            "value": "-955",
+            "metadata": {}
+        },
+        "to": {
+            "type": "string",
+            "value": "-922",
+            "metadata": {}
+        }
+    },
+    {
+        "id": "trip:Trip:7",
+        "type": "Trip",
+        "tripId": "t_0",
+        "blueprintType": {
+            "type": "string",
+            "value": "vehicle.tesla.model3",
+            "metadata": {}
+        },
+        "depart": {
+            "type": "string",
+            "value": "0.00",
+            "metadata": {}
+        },
+        "from": {
+            "type": "string",
+            "value": "-955",
+            "metadata": {}
+        },
+        "to": {
+            "type": "string",
+            "value": "-922",
+            "metadata": {}
+        }
+    },
+    {
+        "id": "trip:Trip:8",
+        "type": "Trip",
+        "tripId": "t_0",
+        "blueprintType": {
+            "type": "string",
+            "value": "vehicle.tesla.model3",
+            "metadata": {}
+        },
+        "depart": {
+            "type": "string",
+            "value": "0.00",
+            "metadata": {}
+        },
+        "from": {
+            "type": "string",
+            "value": "-955",
+            "metadata": {}
+        },
+        "to": {
+            "type": "string",
+            "value": "-922",
+            "metadata": {}
+        }
+    },
+    {
+        "id": "trip:Trip:9",
+        "type": "Trip",
+        "tripId": "t_0",
+        "blueprintType": {
+            "type": "string",
+            "value": "vehicle.tesla.model3",
+            "metadata": {}
+        },
+        "depart": {
+            "type": "string",
+            "value": "0.00",
+            "metadata": {}
+        },
+        "from": {
+            "type": "string",
+            "value": "-955",
+            "metadata": {}
+        },
+        "to": {
+            "type": "string",
+            "value": "-922",
+            "metadata": {}
+        }
+    },
+    {
+        "id": "trip:Trip:10",
+        "type": "Trip",
+        "tripId": "t_0",
+        "blueprintType": {
+            "type": "string",
+            "value": "vehicle.tesla.model3",
+            "metadata": {}
+        },
+        "depart": {
+            "type": "string",
+            "value": "0.00",
+            "metadata": {}
+        },
+        "from": {
+            "type": "string",
+            "value": "-955",
+            "metadata": {}
+        },
+        "to": {
+            "type": "string",
+            "value": "-922",
+            "metadata": {}
+        }
+    }
+]

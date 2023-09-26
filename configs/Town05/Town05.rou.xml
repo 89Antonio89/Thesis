@@ -1,0 +1,39 @@
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+
+    <vType id="pedestrian" impatience="0.8" length="1.00" sigma="0.8" tau="0.5" vClass="pedestrian" width="0.50" />
+    <vType height="1.54" id="vehicle.audi.a2" impatience="0.8" length="3.72" sigma="0.8" tau="0.5" vClass="passenger" width="1.79" />
+    <vType height="1.65" id="vehicle.audi.etron" impatience="0.8" length="4.89" sigma="0.8" tau="0.5" vClass="evehicle" width="2.09" />
+    <vType height="1.38" id="vehicle.audi.tt" impatience="0.8" length="4.15" sigma="0.8" tau="0.5" vClass="passenger" width="2.00" />
+    <vType height="1.53" id="vehicle.bh.crossbike" impatience="0.8" length="1.51" sigma="0.8" tau="0.5" vClass="bicycle" width="0.87" />
+    <vType height="1.68" id="vehicle.bmw.grandtourer" impatience="0.8" length="4.64" sigma="0.8" tau="0.5" vClass="passenger" width="2.26" />
+    <vType guiShape="truck" height="2.48" id="vehicle.carlamotors.carlacola" impatience="0.8" length="5.20" sigma="0.8" tau="0.5" vClass="truck" width="2.62" />
+    <vType height="1.42" id="vehicle.chevrolet.impala" impatience="0.8" length="5.37" sigma="0.8" tau="0.5" vClass="passenger" width="2.05" />
+    <vType height="1.63" id="vehicle.citroen.c3" impatience="0.8" length="3.98" sigma="0.8" tau="0.5" vClass="passenger" width="1.86" />
+    <vType height="1.49" id="vehicle.diamondback.century" impatience="0.8" length="1.66" sigma="0.8" tau="0.5" vClass="bicycle" width="0.42" />
+    <vType guiShape="police" height="1.58" id="vehicle.dodge.charger_police" impatience="0.8" length="5.01" sigma="0.8" tau="0.5" vClass="authority" width="2.05" />
+    <vType height="1.48" id="vehicle.ford.mustang" impatience="0.8" length="4.90" sigma="0.8" tau="0.5" vClass="passenger" width="2.06" />
+    <vType height="1.59" id="vehicle.gazelle.omafiets" impatience="0.8" length="1.84" sigma="0.8" tau="0.5" vClass="bicycle" width="0.47" />
+    <vType height="1.46" id="vehicle.harley-davidson.low_rider" impatience="0.8" length="2.35" sigma="0.8" tau="0.5" vClass="motorcycle" width="0.77" />
+    <vType height="1.88" id="vehicle.jeep.wrangler_rubicon" impatience="0.8" length="3.87" sigma="0.8" tau="0.5" vClass="passenger" width="1.91" />
+    <vType height="1.37" id="vehicle.kawasaki.ninja" impatience="0.8" length="2.04" sigma="0.8" tau="0.5" vClass="motorcycle" width="0.80" />
+    <vType height="1.48" id="vehicle.lincoln.mkz_2017" impatience="0.8" length="4.90" sigma="0.8" tau="0.5" vClass="passenger" width="2.06" />
+    <vType height="1.64" id="vehicle.mercedes.coupe" impatience="0.8" length="5.04" sigma="0.8" tau="0.5" vClass="passenger" width="2.16" />
+    <vType height="1.35" id="vehicle.micro.microlino" impatience="0.8" length="2.20" sigma="0.8" tau="0.5" vClass="evehicle" width="1.49" />
+    <vType height="1.48" id="vehicle.mini.cooper_s" impatience="0.8" length="3.80" sigma="0.8" tau="0.5" vClass="passenger" width="1.97" />
+    <vType height="1.52" id="vehicle.nissan.micra" impatience="0.8" length="3.67" sigma="0.8" tau="0.5" vClass="passenger" width="1.86" />
+    <vType height="1.89" id="vehicle.nissan.patrol" impatience="0.8" length="4.52" sigma="0.8" tau="0.5" vClass="passenger" width="1.92" />
+    <vType height="1.47" id="vehicle.seat.leon" impatience="0.8" length="4.21" sigma="0.8" tau="0.5" vClass="passenger" width="1.82" />
+    <vType height="2.14" id="vehicle.tesla.cybertruck" impatience="0.8" length="6.36" sigma="0.8" tau="0.5" vClass="evehicle" width="2.39" />
+    <vType height="1.52" id="vehicle.tesla.model3" impatience="0.8" length="4.81" sigma="0.8" tau="0.5" vClass="evehicle" width="2.17" />
+    <vType height="1.54" id="vehicle.toyota.prius" impatience="0.8" length="4.54" sigma="0.8" tau="0.5" vClass="evehicle" width="2.00" />
+    <vType guiShape="passenger/van" height="2.05" id="vehicle.volkswagen.t2" impatience="0.8" length="4.47" sigma="0.8" tau="0.5" vClass="passenger" width="1.81" />
+    <vType height="1.63" id="vehicle.yamaha.yzf" impatience="0.8" length="2.19" sigma="0.8" tau="0.5" vClass="motorcycle" width="0.77" />
+
+    <route color="yellow" edges="-19 48 -39" id="r_0" />
+
+    <flow begin="0.00" end="3600.00" from="1" id="f_1" to="39" type="vehicle.seat.leon" vehsPerHour="1800.00" via="0" />
+    <flow begin="0.00" end="3600.00" from="-14" id="f_2" to="-26" type="vehicle.seat.leon" vehsPerHour="1800.00" via="-16" />
+    <flow begin="0.00" end="3600.00" from="-19" id="f_3" to="-0" type="vehicle.mercedes.coupe" vehsPerHour="1800.00" via="48 -39" />
+    <flow begin="0.00" end="3600.00" from="-28" id="f_4" to="25" type="vehicle.mercedes.coupe" vehsPerHour="1800.00" via="-29" />
+    <flow begin="0.00" end="3600.00" from="-28" id="f_5" to="-0" type="vehicle.mercedes.coupe" vehsPerHour="1800.00" via="-29" />
+</routes>

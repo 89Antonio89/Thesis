@@ -75,6 +75,7 @@ class SumoTopology(object):
         - odr2sumo_ids: {
             (odr_road_id, odr_lane_id): [(sumo_edge_id, sumo_lane_id), ...], ...}
     """
+
     def __init__(self, topology, paths, odr2sumo_ids):
         # Contains only standard roads.
         self._topology = topology
@@ -103,9 +104,11 @@ class SumoTopology(object):
         else:
             # Ensures that all the related sumo edges belongs to the same opendrive road but to
             # different lane sections.
-            assert set([edge.split('.', 1)[0] for edge, lane_index in sumo_ids]) == 1
+            assert set([edge.split('.', 1)[0]
+                       for edge, lane_index in sumo_ids]) == 1
 
-            s_coords = [float(edge.split('.', 1)[1]) for edge, lane_index in sumo_ids]
+            s_coords = [float(edge.split('.', 1)[1])
+                        for edge, lane_index in sumo_ids]
 
             s_coords, sumo_ids = zip(*sorted(zip(s_coords, sumo_ids)))
             index = bisect.bisect_left(s_coords, s, lo=1) - 1
@@ -177,13 +180,15 @@ def build_topology(sumo_net):
                     .format(lane.getID()))
 
             if len(lane.getParam('origId').split()) > 1:
-                logging.warning('[Building topology] Sumo net contains joined opendrive roads.')
+                logging.warning(
+                    '[Building topology] Sumo net contains joined opendrive roads.')
 
             for odr_id in lane.getParam('origId').split():
                 odr_road_id, odr_lane_id = odr_id.split('_')
                 if (odr_road_id, int(odr_lane_id)) not in odr2sumo_ids:
                     odr2sumo_ids[(odr_road_id, int(odr_lane_id))] = set()
-                odr2sumo_ids[(odr_road_id, int(odr_lane_id))].add((edge.getID(), lane.getIndex()))
+                odr2sumo_ids[(odr_road_id, int(odr_lane_id))].add(
+                    (edge.getID(), lane.getIndex()))
 
     # -----------
     # Connections
@@ -208,7 +213,8 @@ def build_topology(sumo_net):
                 if (from_edge_id, from_lane_index) not in topology:
                     topology[(from_edge_id, from_lane_index)] = set()
 
-                topology[(from_edge_id, from_lane_index)].add((to_edge_id, to_lane_index))
+                topology[(from_edge_id, from_lane_index)].add(
+                    (to_edge_id, to_lane_index))
 
                 # Checking if the connection is an opendrive path.
                 conn_odr_ids = connection.getParam('origId')
@@ -246,7 +252,8 @@ class SumoTrafficLight(object):
     DEFAULT_DURATION_YELLOW_PHASE = 3
     DEFAULT_DURATION_RED_PHASE = 3
 
-    Phase = collections.namedtuple('Phase', 'duration state min_dur max_dur next name')
+    Phase = collections.namedtuple(
+        'Phase', 'duration state min_dur max_dur next name')
     Connection = collections.namedtuple('Connection',
                                         'tlid from_road to_road from_lane to_lane link_index')
 
@@ -272,7 +279,8 @@ class SumoTrafficLight(object):
         """
         Generates a default program for the given sumo traffic light
         """
-        incoming_roads = [connection.from_road for connection in tl.connections]
+        incoming_roads = [
+            connection.from_road for connection in tl.connections]
         for road in set(incoming_roads):
             phase_green = ['r'] * len(tl.connections)
             phase_yellow = ['r'] * len(tl.connections)
@@ -283,9 +291,12 @@ class SumoTrafficLight(object):
                     phase_green[connection.link_index] = 'g'
                     phase_yellow[connection.link_index] = 'y'
 
-            tl.add_phase(SumoTrafficLight.DEFAULT_DURATION_GREEN_PHASE, ''.join(phase_green))
-            tl.add_phase(SumoTrafficLight.DEFAULT_DURATION_YELLOW_PHASE, ''.join(phase_yellow))
-            tl.add_phase(SumoTrafficLight.DEFAULT_DURATION_RED_PHASE, ''.join(phase_red))
+            tl.add_phase(
+                SumoTrafficLight.DEFAULT_DURATION_GREEN_PHASE, ''.join(phase_green))
+            tl.add_phase(
+                SumoTrafficLight.DEFAULT_DURATION_YELLOW_PHASE, ''.join(phase_yellow))
+            tl.add_phase(
+                SumoTrafficLight.DEFAULT_DURATION_RED_PHASE, ''.join(phase_red))
 
     def add_phase(self, duration, state, min_dur=-1, max_dur=-1, next_phase=None, name=''):
         """
@@ -324,7 +335,7 @@ class SumoTrafficLight(object):
 
         def is_same_connection(c1, c2):
             return c1.from_road == c2.from_road and c1.to_road == c2.to_road and \
-                   c1.from_lane == c2.from_lane and c1.to_lane == c2.to_lane
+                c1.from_lane == c2.from_lane and c1.to_lane == c2.to_lane
 
         connection = SumoTrafficLight.Connection(tlid, from_road, to_road, from_lane, to_lane,
                                                  link_index)
@@ -347,7 +358,8 @@ class SumoTrafficLight(object):
 
         xml_tag = ET.Element('tlLogic', info)
         for phase in self.phases:
-            ET.SubElement(xml_tag, 'phase', {'state': phase.state, 'duration': str(phase.duration)})
+            ET.SubElement(xml_tag, 'phase', {
+                          'state': phase.state, 'duration': str(phase.duration)})
         for parameter in sorted(self.parameters, key=lambda x: x[0]):
             ET.SubElement(xml_tag, 'param', {
                 'key': 'linkSignalID:' + str(parameter[0]),
@@ -375,18 +387,19 @@ def _netconvert_carla_impl(xodr_file, output, tmpdir, guess_tls=False):
     try:
         basedir = os.path.dirname(os.path.realpath(__file__))
         result = subprocess.call(['netconvert',
-            '--opendrive', xodr_file,
-            '--output-file', tmp_sumo_net,
-            '--geometry.min-radius.fix',
-            '--geometry.remove',
-            '--opendrive.curve-resolution', '1',
-            '--opendrive.import-all-lanes',
-            '--type-files', os.path.join(basedir, 'data/opendrive_netconvert.typ.xml'),
-            # Necessary to link odr and sumo ids.
-            '--output.original-names',
-            # Discard loading traffic lights as them will be inserted manually afterwards.
-            '--tls.discard-loaded', 'true',
-        ])
+                                  '--opendrive', xodr_file,
+                                  '--output-file', tmp_sumo_net,
+                                  '--geometry.min-radius.fix',
+                                  '--geometry.remove',
+                                  '--opendrive.curve-resolution', '1',
+                                  '--opendrive.import-all-lanes',
+                                  '--type-files', os.path.join(
+                                      basedir, 'data/opendrive_netconvert.typ.xml'),
+                                  # Necessary to link odr and sumo ids.
+                                  '--output.original-names',
+                                  # Discard loading traffic lights as them will be inserted manually afterwards.
+                                  '--tls.discard-loaded', 'true',
+                                  ])
     except subprocess.CalledProcessError:
         raise RuntimeError('There was an error when executing netconvert.')
     else:
@@ -423,7 +436,8 @@ def _netconvert_carla_impl(xodr_file, output, tmpdir, guess_tls=False):
                 if lane_id == 0:
                     continue
 
-                wp = carla_map.get_waypoint_xodr(landmark.road_id, lane_id, landmark.s)
+                wp = carla_map.get_waypoint_xodr(
+                    landmark.road_id, lane_id, landmark.s)
                 if wp is None:
                     logging.warning(
                         'Could not find waypoint for landmark {} (road_id: {}, lane_id: {}, s:{}'.
@@ -440,13 +454,15 @@ def _netconvert_carla_impl(xodr_file, output, tmpdir, guess_tls=False):
 
                     if guess_tls:
                         for from_edge, from_lane in sumo_topology.get_incoming(road_id, lane_id):
-                            successors = sumo_topology.get_successors(from_edge, from_lane)
+                            successors = sumo_topology.get_successors(
+                                from_edge, from_lane)
                             for to_edge, to_lane in successors:
                                 tl.add_landmark(landmark.id, tl.id, from_edge, to_edge, from_lane,
                                                 to_lane)
 
                     else:
-                        connections = sumo_topology.get_path_connectivity(road_id, lane_id)
+                        connections = sumo_topology.get_path_connectivity(
+                            road_id, lane_id)
                         for from_, to_ in connections:
                             from_edge, from_lane = from_
                             to_edge, to_lane = to_
@@ -457,18 +473,22 @@ def _netconvert_carla_impl(xodr_file, output, tmpdir, guess_tls=False):
                 # When the landmarks does not belong to a junction (i.e., belongs to a std road),
                 # we place the traffic light between that std road and its successor.
                 elif not wp.is_junction and not sumo_topology.is_junction(road_id, lane_id):
-                    from_edge, from_lane = sumo_topology.get_sumo_id(road_id, lane_id, landmark.s)
+                    from_edge, from_lane = sumo_topology.get_sumo_id(
+                        road_id, lane_id, landmark.s)
 
                     for to_edge, to_lane in sumo_topology.get_successors(from_edge, from_lane):
-                        tlid = SumoTrafficLight.generate_tl_id(from_edge, to_edge)
+                        tlid = SumoTrafficLight.generate_tl_id(
+                            from_edge, to_edge)
                         if tlid not in tls:
                             tls[tlid] = SumoTrafficLight(tlid)
                         tl = tls[tlid]
 
-                        tl.add_landmark(landmark.id, tl.id, from_edge, to_edge, from_lane, to_lane)
+                        tl.add_landmark(landmark.id, tl.id,
+                                        from_edge, to_edge, from_lane, to_lane)
 
                 else:
-                    logging.warning('Landmark %s could not be added.', landmark.id)
+                    logging.warning(
+                        'Landmark %s could not be added.', landmark.id)
 
     # ---------------
     # Modify sumo net
@@ -504,10 +524,11 @@ def _netconvert_carla_impl(xodr_file, output, tmpdir, guess_tls=False):
                     connection.from_road, connection.to_road, connection.from_lane,
                     connection.to_lane))
 
-    tree.write(output, pretty_print=True, encoding='UTF-8', xml_declaration=True)
+    tree.write(output, pretty_print=True,
+               encoding='UTF-8', xml_declaration=True)
 
 
-def netconvert_carla(xodr_file, output, guess_tls=False):
+def netconvert_carla(xodr_file, output, guess_tls=True):
     """
     Generates sumo net.
 
